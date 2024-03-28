@@ -1,6 +1,5 @@
-# # Login: au.test.example@mail.ru
-# # Password: AIAutomationTEST1011
-
+# Login: au.test.example@mail.ru
+# Password: AIAutomationTEST1011
 
 import pytest
 from selenium.webdriver.common.by import By
@@ -17,19 +16,19 @@ def driver_setup():
     yield driver
     driver.quit()
 
+    # Открытие главной Spotify
 def test_open_spotify(driver_setup):
     driver = driver_setup
     driver.get('https://open.spotify.com/')
     print('Нужная страница открыта')
 
+    # Авторизация
 def test_login(driver_setup):
     driver = driver_setup
     wait = WebDriverWait(driver, 10)
     find = lambda by, value: wait.until(EC.presence_of_element_located((by, value)))
     print('Есть кнопка регистрации')
-    assert find(By.CSS_SELECTOR, 'button[data-testid="signup-button"]')
-
-    # Авторизация
+    assert find(By.CSS_SELECTOR, 'button[data-testid="signup-button"]') 
     find(By.CSS_SELECTOR, '[data-testid=login-button]').click()
     print('Открыта форма авторизации')
     assert find(By.XPATH, '//*[@data-testid="login-container"]')
@@ -40,6 +39,7 @@ def test_login(driver_setup):
     print('Авторизация прошла успешно')
     assert find(By.XPATH, '//*[@aria-label="AQA_Aleksandr"]')
 
+    # Операции с поиском
 def test_search_playlist(driver_setup):
     driver = driver_setup
     wait = WebDriverWait(driver, 10)
@@ -47,18 +47,16 @@ def test_search_playlist(driver_setup):
     find(By.XPATH, '//a[@class="link-subtle UYeKN11KAw61rZoyjcgZ"]').click()
     print('Открыта вкладка поиска')
     assert find(By.XPATH, '//*[@class="CCi1L2OQvgdZvxkRHeKE"]')
-
-    # Операции с поиском
     search_input = find(By.XPATH, '//input[@data-encore-id="text"]')
     search_input.send_keys('fallout 4 radio')
+    find(By.XPATH, '//button[@aria-label="Закрыть"]').click()
     find(By.XPATH, '//*[@class="_gB1lxCfXeR8_Wze5Cx9"]').click()
     print('Проверка наличия найденного плейлиста')
-    assert find(By.XPATH, '//*[@title="Fallout 4 Radio Soundtrack"]')
+    assert find(By.XPATH, '//h1[text()="Fallout 4 Radio Soundtrack"]')
     print('Плейлист открылся')
     assert find(By.XPATH, '//*[@data-testid="playlist-tracklist"]')
     play_btn = find(By.XPATH, '(//*[@class="Svg-sc-ytk21e-0 bneLcE"])[4]')
     play_btn.click()
-
     # Убираем запрос куков
     find(By.XPATH, '//*[@id="onetrust-close-btn-container"]').click()
     print('Попап с запросом cookies закрыт')
@@ -84,7 +82,7 @@ def test_user_profile_actions(driver_setup):
     assert find(By.XPATH, '//*[@class="contentSpacing"]')
 
     print('Тест завершен! Браузер скоро закроется')
-    sleep(2)
+    sleep(10)
 
 
 
